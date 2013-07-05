@@ -1,4 +1,4 @@
-/* ===========================================================
+/* ========================================================== *
  * bootstrap-inputmask.js j2
  * http://twitter.github.com/bootstrap/javascript.html#tooltips
  * Based on Masked Input plugin by Josh Bush (digitalbush.com)
@@ -183,6 +183,9 @@
     
     focusEvent: function() {
       this.focusText = this.$element.val()
+      if(this.focusText.length>0 && this.options.allowPartial){
+        this.buffer = this.focusText.split("")
+      }
       var len = this.mask.length 
       var pos = this.checkVal()
       this.writeBuffer()
@@ -215,7 +218,7 @@
         var pos = this.caret(),
         begin = pos.begin,
         end = pos.end
-						
+            
         if (end-begin === 0) {
           begin = k!=46 ? this.seekPrev(begin) : (end=this.seekNext(begin-1))
           end = k==46 ? this.seekNext(end) : end
@@ -306,10 +309,10 @@
         }
       }
       if (!allow && lastMatch + 1 < this.partialPosition) {
-        if(this.options.deleteInvalid) {
+        if(this.options.allowPartial) {
           this.$element.val("");  
+          this.clearBuffer(0, len)
         }
-        this.clearBuffer(0, len)
       } else if (allow || lastMatch + 1 >= this.partialPosition) {
         this.writeBuffer()
         if (!allow) this.$element.val(this.$element.val().substring(0, lastMatch + 1))
@@ -333,7 +336,7 @@
   $.fn.inputmask.defaults = {
     mask: "",
     placeholder: "_",
-    deleteInvalid: true,
+    allowPartial: true,
     definitions: {
       '9': "[0-9]",
       'a': "[A-Za-z]",
