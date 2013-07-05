@@ -183,11 +183,15 @@
     
     focusEvent: function() {
       this.focusText = this.$element.val()
-      if(this.focusText.length>0 && this.options.allowPartial){
-        this.buffer = this.focusText.split("")
-      }
       var len = this.mask.length 
       var pos = this.checkVal()
+      if(this.focusText.length>0 && this.options.allowPartial && pos>0){
+        var newBuffer = this.focusText.split("")
+        for (var i = newBuffer.length - 1; i >= 0; i--) {
+          this.buffer[i] = newBuffer[i];
+        };
+        
+      }
       this.writeBuffer()
 
       var that = this
@@ -309,7 +313,7 @@
         }
       }
       if (!allow && lastMatch + 1 < this.partialPosition) {
-        if(this.options.allowPartial) {
+        if(!this.options.allowPartial) {
           this.$element.val("");  
           this.clearBuffer(0, len)
         }
