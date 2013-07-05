@@ -306,7 +306,9 @@
         }
       }
       if (!allow && lastMatch + 1 < this.partialPosition) {
-        this.$element.val("")
+        if(this.options.deleteInvalid) {
+          this.$element.val("");  
+        }
         this.clearBuffer(0, len)
       } else if (allow || lastMatch + 1 >= this.partialPosition) {
         this.writeBuffer()
@@ -331,6 +333,7 @@
   $.fn.inputmask.defaults = {
     mask: "",
     placeholder: "_",
+    deleteInvalid: true,
     definitions: {
       '9': "[0-9]",
       'a': "[A-Za-z]",
